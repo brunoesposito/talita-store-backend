@@ -1,14 +1,14 @@
 'use strict'
 
-const User = use('App/Models/User');
+const Bull = use('Rocketseat/Bull');
+const Job = use('App/Jobs/CreateUser');
 
 class UserController {
     async create ({ request, response }) {
         try {
             const data = request.only(['name', 'username', 'email', 'password']);
-            const user = await User.create(data);
 
-            return user;
+            Bull.add(Job.key, data)
         }catch {
             return response.json({
                 message: 'Email já existe'
